@@ -1,23 +1,194 @@
-﻿using MemCleaner;
-using System;
+﻿using MemCleaner.Core;
+using System.Security.Principal;
+using System.Text.Json;
+
+namespace MemCleaner;
 
 public static class Program
 {
-    static void Main()
+    private static readonly JsonSerializerOptions _options = new() { WriteIndented = true };
+
+    static int Main(string[] args)
     {
-        Console.WriteLine("Status antes da limpeza:");
-        MemoryCleaner.ShowMemoryStatus();
+        try
+        {
+            if (args.Length == 0)
+            {
+                ShowHelp();
+                return 0;
+            }
 
-        Console.WriteLine("\nLimpando memória do sistema...");
-        MemoryCleaner.ClearSystemCache();
+            var command = args[0].ToLowerInvariant();
+            var useJson = args.Contains("--json") || args.Contains("-j");
 
-        Console.WriteLine("Limpando processos...");
-        MemoryCleaner.CleanAllProcesses();
+            return command switch
+            {
+                "optimize" or "o" => ExecuteOptimize(useJson),
+                "clear-processes" or "cp" => ExecuteCleanProcesses(useJson),
+                "clear-cache" or "cc" => ExecuteCleanCache(useJson),
+                "status" or "s" => ExecuteStatus(useJson),
+                "help" or "h" => ShowHelp(),
+                _ => HandleInvalidCommand(command)
+            };
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Erro: {ex.Message}");
+            return 1;
+        }
+    }
 
-        Console.WriteLine("\nStatus após limpeza:");
-        MemoryCleaner.ShowMemoryStatus();
+    private static int ExecuteOptimize(bool useJson)
+    {
+        if (!CheckAdminPrivileges()) return 1;
 
-        Console.WriteLine("\nConcluído.");
-        Console.ReadKey();
+        var memBefore = MemoryStatusProvider.GetMemoryInfo();
+        var result = MemoryOptimizer.OptimizeMemory();
+        var memAfter = MemoryStatusProvider.GetMemoryInfo();
+
+        if (useJson)
+        {
+            var output = new
+            {
+                success = true,
+                operation = "optimize",
+                before = memBefore,
+                after = memAfter,
+                freed_mb = memBefore.UsedPhysicalMB - memAfter.UsedPhysicalMB,
+                processes_cleaned = result.ProcessesCleaned,
+                total_processes = result.TotalProcesses
+            };
+            Console.WriteLine(JsonSerializer.Serialize(output, _options));
+        }
+        else
+        {
+            Console.WriteLine("Otimização completa executada com sucesso!");
+            Console.WriteLine($"Processos limpos: {result.ProcessesCleaned}/{result.TotalProcesses}");
+            Console.WriteLine($"Memória liberada: {memBefore.UsedPhysicalMB - memAfter.UsedPhysicalMB:N0} MB");
+        }
+
+        return 0;
+    }
+
+    private static int ExecuteCleanProcesses(bool useJson)
+    {
+        if (!CheckAdminPrivileges()) return 1;
+
+        var result = MemoryOptimizer.CleanAllProcesses();
+
+        if (useJson)
+        {
+            var output = new
+            {
+                success = true,
+                operation = "clear_processes",
+                processes_cleaned = result.ProcessesCleaned,
+                total_processes = result.TotalProcesses
+            };
+            Console.WriteLine(JsonSerializer.Serialize(output, _options));
+        }
+        else
+        {
+            Console.WriteLine($"Processos limpos: {result.ProcessesCleaned}/{result.TotalProcesses}");
+        }
+
+        return 0;
+    }
+
+    private static int ExecuteCleanCache(bool useJson)
+    {
+        if (!CheckAdminPrivileges()) return 1;
+
+        MemoryOptimizer.ClearSystemCache();
+
+        if (useJson)
+        {
+            var output = new
+            {
+                success = true,
+                operation = "clear_cache"
+            };
+            Console.WriteLine(JsonSerializer.Serialize(output));
+        }
+        else
+        {
+            Console.WriteLine("Cache do sistema limpo com sucesso!");
+        }
+
+        return 0;
+    }
+
+    private static int ExecuteStatus(bool useJson)
+    {
+        var info = MemoryStatusProvider.GetMemoryInfo();
+
+        if (useJson)
+        {
+            Console.WriteLine(JsonSerializer.Serialize(info, _options));
+        }
+        else
+        {
+            Console.WriteLine($"Uso de memória: {info.MemoryLoad}%");
+            Console.WriteLine($"RAM Total: {info.TotalPhysicalMB:N0} MB");
+            Console.WriteLine($"RAM Livre: {info.AvailablePhysicalMB:N0} MB");
+            Console.WriteLine($"RAM em Uso: {info.UsedPhysicalMB:N0} MB");
+        }
+
+        return 0;
+    }
+
+    private static int ShowHelp()
+    {
+        Console.WriteLine(string.Join(Environment.NewLine,
+            "MemCleaner - Otimizador de Memória",
+            "",
+            "USO:",
+            "   MemCleaner <comando> [opções]",
+            "",
+            "COMANDOS:",
+            "   optimize, o             Otimização completa (cache + processos + GC)",
+            "   clear-processes, cp     Limpar apenas processos",
+            "   clear-cache, cc         Limpar apenas cache do sistema",
+            "   status, s               Exibir status da memória",
+            "   help, h                 Exibir esta ajuda",
+            "",
+            "OPÇÕES:",
+            "   --json, -j              Retornar resultado em formato JSON",
+            "",
+            "NOTAS:",
+            "   - Requer privilégios de administrador para funcionamento completo",
+            "   - Código de saída: 0 = sucesso, 1 = erro"
+        ));
+        return 0;
+    }
+
+    private static int HandleInvalidCommand(string command)
+    {
+        Console.Error.WriteLine($"Comando inválido: '{command}'");
+        Console.Error.WriteLine("Use 'MemCleaner help' para ver os comandos disponíveis.");
+        return 1;
+    }
+
+    private static bool CheckAdminPrivileges()
+    {
+        if (IsAdministrator()) return true;
+
+        Console.Error.WriteLine("ERRO: Esta operação requer privilégios de administrador.");
+        Console.Error.WriteLine("Execute o programa como administrador.");
+        return false;
+    }
+
+    private static bool IsAdministrator()
+    {
+        try
+        {
+            using var identity = WindowsIdentity.GetCurrent();
+            var principal = new WindowsPrincipal(identity);
+            return principal.IsInRole(WindowsBuiltInRole.Administrator);
+        }
+        catch
+        {
+            return false;
+        }
     }
 }
