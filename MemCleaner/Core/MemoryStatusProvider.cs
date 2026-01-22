@@ -11,7 +11,7 @@ internal static class MemoryStatusProvider
         var mem = new MEMORYSTATUSEX { dwLength = (uint)Marshal.SizeOf<MEMORYSTATUSEX>() };
 
         if (!NativeMethods.GlobalMemoryStatusEx(ref mem))
-            throw new InvalidOperationException("Falha ao obter status da memória");
+            throw new InvalidOperationException("Failed to retrieve memory status");
 
         return new MemoryInfo
         {

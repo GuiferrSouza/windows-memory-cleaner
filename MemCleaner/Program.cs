@@ -140,32 +140,32 @@ public static class Program
     private static int ShowHelp()
     {
         Console.WriteLine(string.Join(Environment.NewLine,
-            "MemCleaner - Otimizador de Memória",
+            "MemCleaner - Memory Optimizer",
             "",
-            "USO:",
-            "   MemCleaner <comando> [opções]",
+            "USAGE:",
+            "   MemCleaner <command> [options]",
             "",
-            "COMANDOS:",
-            "   optimize, o             Otimização completa (cache + processos + GC)",
-            "   clear-processes, cp     Limpar apenas processos",
-            "   clear-cache, cc         Limpar apenas cache do sistema",
-            "   status, s               Exibir status da memória",
-            "   help, h                 Exibir esta ajuda",
+            "COMMANDS:",
+            "   optimize, o             Full optimization (cache + processes + GC)",
+            "   clear-processes, cp     Clear processes only",
+            "   clear-cache, cc         Clear system cache only",
+            "   status, s               Show memory status",
+            "   help, h                 Show this help",
             "",
-            "OPÇÕES:",
-            "   --json, -j              Retornar resultado em formato JSON",
+            "OPTIONS:",
+            "   --json, -j              Return result in JSON format",
             "",
-            "NOTAS:",
-            "   - Requer privilégios de administrador para funcionamento completo",
-            "   - Código de saída: 0 = sucesso, 1 = erro"
+            "NOTES:",
+            "   - Requires administrator privileges for full functionality",
+            "   - Exit code: 0 = success, 1 = error"
         ));
         return 0;
     }
 
     private static int HandleInvalidCommand(string command)
     {
-        Console.Error.WriteLine($"Comando inválido: '{command}'");
-        Console.Error.WriteLine("Use 'MemCleaner help' para ver os comandos disponíveis.");
+        Console.Error.WriteLine($"Invalid command: '{command}'");
+        Console.Error.WriteLine("Use 'MemCleaner help' to see available commands.");
         return 1;
     }
 
@@ -173,8 +173,8 @@ public static class Program
     {
         if (IsAdministrator()) return true;
 
-        Console.Error.WriteLine("ERRO: Esta operação requer privilégios de administrador.");
-        Console.Error.WriteLine("Execute o programa como administrador.");
+        Console.Error.WriteLine("ERROR: This operation requires administrator privileges.");
+        Console.Error.WriteLine("Run the program as an administrator.");
         return false;
     }
 
