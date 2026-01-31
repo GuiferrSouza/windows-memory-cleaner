@@ -140,10 +140,10 @@ public static class Program
     private static int ShowHelp()
     {
         Console.WriteLine(string.Join(Environment.NewLine,
-            "WindowsMemoryCleaner - Memory Optimizer",
+            "Windows Memory Cleaner - Memory Optimizer",
             "",
             "USAGE:",
-            "   WindowsMemoryCleaner <command> [options]",
+            "   wmc <command> [options]",
             "",
             "COMMANDS:",
             "   optimize, o             Full optimization (cache + processes + GC)",

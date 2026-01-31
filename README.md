@@ -23,24 +23,10 @@ A C# console application for Windows that helps optimize system memory. It can c
 
 ---
 
-## Installation
-
-Clone this repository and build the project using the .NET SDK:
-
-```bash
-git clone https://github.com/yourusername/MemCleaner.git
-cd MemCleaner
-dotnet build -c Release
-```
-
-After building, you can run the executable from the `bin/Release/net6.0` folder.
-
----
-
 ## Usage
 
 ```bash
-MemCleaner <command> [options]
+wmc <command> [options]
 ```
 
 ### Commands
@@ -66,19 +52,19 @@ MemCleaner <command> [options]
 1. **Full Optimization:**
 
 ```bash
-MemCleaner optimize
+wmc optimize
 ```
 
 2. **Clean Processes Only in JSON:**
 
 ```bash
-MemCleaner clear-processes --json
+wmc clear-processes --json
 ```
 
 3. **Show Memory Status:**
 
 ```bash
-MemCleaner status
+wmc status
 ```
 
 ---
@@ -123,4 +109,4 @@ Memory freed: 120 MB
 
 - Administrator privileges are required for commands that modify memory.  
 - Exit code `0` indicates success, `1` indicates an error.  
-- Use `MemCleaner help` to display the usage guide at any time.
+- Use `wmc help` to display the usage guide at any time.
