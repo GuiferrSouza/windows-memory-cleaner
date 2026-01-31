@@ -1,6 +1,6 @@
-# MemCleaner
+# windows-memory-cleaner
 
-**MemCleaner** is a C# console application for Windows that helps optimize system memory. It can clear processes, free system cache, perform full memory optimization, and display memory status. It supports both human-readable and JSON output formats.
+A C# console application for Windows that helps optimize system memory. It can clear processes, free system cache, perform full memory optimization, and display memory status. It supports both human-readable and JSON output formats.
 
 ---
 
