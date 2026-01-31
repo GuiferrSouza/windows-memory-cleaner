@@ -1,4 +1,4 @@
-﻿namespace MemCleaner.Interop;
+﻿namespace WindowsMemoryCleaner.Interop;
 
 [Flags]
 internal enum ProcessAccessFlags : uint

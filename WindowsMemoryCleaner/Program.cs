@@ -1,8 +1,8 @@
-﻿using MemCleaner.Core;
+﻿using WindowsMemoryCleaner.Core;
 using System.Security.Principal;
 using System.Text.Json;
 
-namespace MemCleaner;
+namespace WindowsMemoryCleaner;
 
 public static class Program
 {
@@ -140,10 +140,10 @@ public static class Program
     private static int ShowHelp()
     {
         Console.WriteLine(string.Join(Environment.NewLine,
-            "MemCleaner - Memory Optimizer",
+            "WindowsMemoryCleaner - Memory Optimizer",
             "",
             "USAGE:",
-            "   MemCleaner <command> [options]",
+            "   WindowsMemoryCleaner <command> [options]",
             "",
             "COMMANDS:",
             "   optimize, o             Full optimization (cache + processes + GC)",
@@ -165,7 +165,7 @@ public static class Program
     private static int HandleInvalidCommand(string command)
     {
         Console.Error.WriteLine($"Invalid command: '{command}'");
-        Console.Error.WriteLine("Use 'MemCleaner help' to see available commands.");
+        Console.Error.WriteLine("Use 'WindowsMemoryCleaner help' to see available commands.");
         return 1;
     }
 

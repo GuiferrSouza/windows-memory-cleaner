@@ -1,8 +1,8 @@
-﻿using MemCleaner.Interop;
-using MemCleaner.Models;
+﻿using WindowsMemoryCleaner.Interop;
+using WindowsMemoryCleaner.Models;
 using System.Runtime.InteropServices;
 
-namespace MemCleaner.Core;
+namespace WindowsMemoryCleaner.Core;
 
 internal static class MemoryStatusProvider
 {

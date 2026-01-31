@@ -1,4 +1,4 @@
-﻿namespace MemCleaner.Models;
+﻿namespace WindowsMemoryCleaner.Models;
 internal sealed class OptimizationResult
 {
     public required int ProcessesCleaned { get; init; }

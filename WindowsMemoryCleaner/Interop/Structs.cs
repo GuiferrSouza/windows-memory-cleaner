@@ -1,5 +1,5 @@
 ﻿using System.Runtime.InteropServices;
-namespace MemCleaner.Interop;
+namespace WindowsMemoryCleaner.Interop;
 
 [StructLayout(LayoutKind.Sequential)]
 internal struct MEMORYSTATUSEX

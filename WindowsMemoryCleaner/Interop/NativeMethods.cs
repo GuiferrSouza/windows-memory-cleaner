@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace MemCleaner.Interop;
+namespace WindowsMemoryCleaner.Interop;
 
 internal static class NativeMethods
 {

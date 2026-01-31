@@ -1,4 +1,4 @@
-﻿namespace MemCleaner.Models;
+﻿namespace WindowsMemoryCleaner.Models;
 internal sealed class MemoryInfo
 {
     public required ulong TotalPhysicalMB { get; init; }
