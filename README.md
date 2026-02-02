@@ -110,3 +110,9 @@ Memory freed: 120 MB
 - Administrator privileges are required for commands that modify memory.  
 - Exit code `0` indicates success, `1` indicates an error.  
 - Use `wmc help` to display the usage guide at any time.
+
+---
+
+## License
+
+MIT License.
